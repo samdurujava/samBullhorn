@@ -36,10 +36,10 @@ public class HomeController {
     @PostMapping("/send")
     public String sendMessage(@Valid Message msg, BindingResult result, @RequestParam("file")MultipartFile file) {
         if (result.hasErrors()) {
-            return "add";
+            return "redirect:/add";
         }
         if (file.isEmpty()) {
-            return "/add";
+            return "redirect:/add";
         }
         try {
             Map uploadResult = cloudc.upload(file.getBytes(), ObjectUtils.asMap("resourcetype", "auto"));
@@ -51,7 +51,7 @@ public class HomeController {
             list.save(msg);
         } catch (Exception e) {
             e.printStackTrace();
-            return "/add";
+            return "redirect:/add";
         }
 
         return "redirect:/";
