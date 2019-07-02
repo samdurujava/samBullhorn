@@ -38,21 +38,19 @@ public class HomeController {
         if (result.hasErrors()) {
             return "redirect:/add";
         }
-        if (file.isEmpty()) {
-            return "redirect:/add";
+        if (!file.isEmpty()) {
+            try {
+                Map uploadResult = cloudc.upload(file.getBytes(), ObjectUtils.asMap("resourcetype", "auto"));
+                msg.setImage(uploadResult.get("url").toString());
+                String info = cloudc.createUrl(uploadResult.get("public_id").toString() + ".jpg", 50, 50, "fill");
+                String thumb = info.substring(info.indexOf("'") + 1, info.indexOf("'", info.indexOf("'") + 1));
+                msg.setThumb(thumb);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            Map uploadResult = cloudc.upload(file.getBytes(), ObjectUtils.asMap("resourcetype", "auto"));
-            msg.setImage(uploadResult.get("url").toString());
-            String info = cloudc.createUrl(uploadResult.get("public_id").toString() + ".jpg", 50, 50, "fill");
-            String thumb = info.substring(info.indexOf("'") + 1, info.indexOf("'", info.indexOf("'") + 1));
-            msg.setThumb(thumb);
-            msg.setPostedDate(new Date());
-            list.save(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "redirect:/add";
-        }
+        msg.setPostedDate(new Date());
+        list.save(msg);
 
         return "redirect:/";
     }
