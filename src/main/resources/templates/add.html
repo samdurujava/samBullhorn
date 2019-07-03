@@ -12,7 +12,6 @@
 <form action="#" th:action="@{/send/}" th:object="${msg}" method="post" enctype="multipart/form-data">
     <input type="hidden" th:field="*{id}" />
     What's happening?<br /><textarea class="form-control" rows="3" th:field="*{content}"/><br />
-    Username:<br /><input class="form-control" type="text" th:field="*{sentBy}"/><br />
     <input class="form-control-file" type="file" name="file" /><br />
     <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" th:field="*{sepia}"/>
     <label class="form-check-label" for="defaultCheck1">

@@ -8,39 +8,15 @@
 <body>
 <h1></h1>
 <div class="container">
-    <div th:replace="base :: header"></div>
-    <p>Logged in as:
-        <b th:text="${user.username}"></b>
-        <a class="btn btn-dark btn-sm" role="button" href="/logout">Logout</a>
-    </p>
-    <table class="table table-bordered">
-        <thead class="thead-dark">
-        <tr>
-            <th>User</th>
-            <th>Content</th>
-            <th>Date</th>
-            <th>Preview</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="msg : ${list}">
-            <td th:text="${msg.sentBy}"></td>
-            <td th:text="${msg.content}"></td>
-            <td th:text="${msg.postedDate}"></td>
-            <td>
-                <a th:href="@{/view/{id}(id=${msg.id})}">
-                    View
-                    <div th:if="${msg.thumb} != null">
-                        <img th:src="${msg.thumb}" class="img-thumbnail" />
-                    </div>
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <form action="#" th:action="@{/enter/}" th:object="${user}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        Username:<br /><input class="form-control" type="text" th:field="*{username}"/><br />
+        Password:<br /><input class="form-control" type="password" th:field="*{password}"/><br />
+        <input class="btn btn-primary btn-lg" role="button" type="submit" value="Login" />
+    </form>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</div>
 </body>
 </html>

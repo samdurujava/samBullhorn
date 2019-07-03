@@ -19,16 +19,66 @@ public class HomeController {
     MessageList list;
 
     @Autowired
+    UserList users;
+
+    User currentUser = null;
+
+    @Autowired
     CloudinaryConfig cloudc;
 
     @RequestMapping("/")
     public String homePage(Model model) {
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("list", list.findAll());
+        model.addAttribute("user", currentUser);
         return "list";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        if (currentUser != null) {
+            return "redirect:/";
+        }
+        model.addAttribute("user", new User());
+        return "login";
+    }
+
+    @RequestMapping("/logout")
+    public String logout() {
+        currentUser = null;
+        return "redirect:/login";
+    }
+
+    @PostMapping("/enter")
+    public String loginEnter(@Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "login";
+        }
+        boolean notExist = true;
+        boolean nameTaken = false;
+        for (User prevUser : users.findAll()) {
+            if (prevUser.getUsername().equals(user.getUsername()) && prevUser.getPassword().equals(user.getPassword())) {
+                notExist = false;
+            } else if (prevUser.getUsername().equals(user.getUsername())) {
+                nameTaken = true;
+            }
+        }
+        if (notExist && nameTaken) {
+            return "login";
+        } else if (notExist) {
+            users.save(user);
+        }
+        currentUser = user;
+        return "redirect:/";
     }
 
     @GetMapping("/add")
     public String addMessage(Model model) {
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("msg", new Message());
         return "add";
     }
@@ -55,6 +105,7 @@ public class HomeController {
                 e.printStackTrace();
             }
         }
+        msg.setSentBy(currentUser.getUsername());
         msg.setPostedDate(new Date());
         list.save(msg);
 
@@ -63,6 +114,9 @@ public class HomeController {
 
     @RequestMapping("/view/{id}")
     public String viewTask(@PathVariable("id") long id, Model model) {
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("msg", list.findById(id).get());
         return "show";
     }
