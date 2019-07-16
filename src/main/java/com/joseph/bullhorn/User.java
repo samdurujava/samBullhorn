@@ -1,31 +1,40 @@
 package com.joseph.bullhorn;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 
 @Entity
+@Table(name="User_Data")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @NonNull
     @Size(min = 3, max = 20)
+    @Column(name = "username")
     private String username;
 
-    @NonNull
-    @Size(min = 5, max = 40)
+    @Size(min = 5)
+    @Column(name = "password")
     private String password;
 
-    public User(@Size(min = 3, max = 20) String username, @Size(min = 5, max = 40) String password) {
-        this.username = username;
-        this.password = password;
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
+
+    public User(String username, String password, boolean enabled) {
+        setUsername(username);
+        setPassword(password);
+        setEnabled(enabled);
     }
 
     public User() {
@@ -52,6 +61,23 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

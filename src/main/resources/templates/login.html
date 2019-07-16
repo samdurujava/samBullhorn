@@ -8,11 +8,17 @@
 <body>
 <h1></h1>
 <div class="container">
-    <form action="#" th:action="@{/enter/}" th:object="${user}" method="post">
-        <input type="hidden" th:field="*{id}" />
-        Username:<br /><input class="form-control" type="text" th:field="*{username}"/><br />
-        Password:<br /><input class="form-control" type="password" th:field="*{password}"/><br />
+    <div th:if="${created}">
+        Created new User! Please try logging in!
+    </div>
+    <div th:if="${param.error}">
+        Invalid username or password
+    </div>
+    <form action="#" th:action="@{/login}" method="post">
+        Username:<br /><input class="form-control" type="text" name="username"/><br />
+        Password:<br /><input class="form-control" type="password" name="password"/><br />
         <input class="btn btn-primary btn-lg" role="button" type="submit" value="Login" />
+        <a class="btn btn-primary btn-lg" role="button" th:href="@{/register}">Register</a>
     </form>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

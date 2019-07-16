@@ -2,6 +2,7 @@ package com.joseph.bullhorn;
 
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.security.Principal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -19,72 +22,57 @@ public class HomeController {
     MessageList list;
 
     @Autowired
-    UserList users;
+    UserRepository userRepository;
 
-    User currentUser = null;
+    @Autowired
+    RoleRepository roleRepository;
 
     @Autowired
     CloudinaryConfig cloudc;
 
-    @RequestMapping("/")
-    public String homePage(Model model) {
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("list", list.findAll());
-        model.addAttribute("user", currentUser);
-        return "list";
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String showRegistrationPage(Model model) {
+        model.addAttribute("user", new User());
+        return "registration";
     }
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        if (currentUser != null) {
-            return "redirect:/";
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String processRegistrationPage(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
+        model.addAttribute("user", user);
+        if (result.hasErrors()){
+            return "registration";
+        } else {
+            user.setEnabled(true);
+            user.setRoles(Arrays.asList(roleRepository.findByRole("USER")));
+            userRepository.save(user);
+            model.addAttribute("created",  true);
         }
-        model.addAttribute("user", new User());
         return "login";
     }
 
-    @RequestMapping("/logout")
-    public String logout() {
-        currentUser = null;
-        return "redirect:/login";
+    @RequestMapping("/")
+    public String homePage(Principal principal, Model model) {
+        model.addAttribute("list", list.findAll());
+        User user = ((CustomUserDetails)((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getUser();
+        model.addAttribute("user", user);
+        return "list";
     }
 
-    @PostMapping("/enter")
-    public String loginEnter(@Valid User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return "login";
-        }
-        boolean notExist = true;
-        boolean nameTaken = false;
-        for (User prevUser : users.findAll()) {
-            if (prevUser.getUsername().equals(user.getUsername()) && prevUser.getPassword().equals(user.getPassword())) {
-                notExist = false;
-            } else if (prevUser.getUsername().equals(user.getUsername())) {
-                nameTaken = true;
-            }
-        }
-        if (notExist && nameTaken) {
-            return "login";
-        } else if (notExist) {
-            users.save(user);
-        }
-        currentUser = user;
-        return "redirect:/";
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
     }
 
     @GetMapping("/add")
-    public String addMessage(Model model) {
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
+    public String addMessage(Principal principal, Model model) {
         model.addAttribute("msg", new Message());
+        User user = ((CustomUserDetails)((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getUser();
+        model.addAttribute("user", user);
         return "add";
     }
 
     @PostMapping("/send")
-    public String sendMessage(@Valid Message msg, BindingResult result, @RequestParam("file")MultipartFile file) {
+    public String sendMessage(Principal principal, @Valid Message msg, BindingResult result, @RequestParam("file")MultipartFile file) {
         if (result.hasErrors()) {
             return "redirect:/add";
         }
@@ -105,7 +93,8 @@ public class HomeController {
                 e.printStackTrace();
             }
         }
-        msg.setSentBy(currentUser.getUsername());
+        User user = ((CustomUserDetails)((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getUser();
+        msg.setSentBy(user.getUsername());
         msg.setPostedDate(new Date());
         list.save(msg);
 
@@ -114,9 +103,6 @@ public class HomeController {
 
     @RequestMapping("/view/{id}")
     public String viewTask(@PathVariable("id") long id, Model model) {
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
         model.addAttribute("msg", list.findById(id).get());
         return "show";
     }
