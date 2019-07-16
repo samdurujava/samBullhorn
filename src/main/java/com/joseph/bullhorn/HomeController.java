@@ -55,7 +55,27 @@ public class HomeController {
         model.addAttribute("list", list.findAll());
         User user = ((CustomUserDetails)((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getUser();
         model.addAttribute("user", user);
+        Role role1 = roleRepository.findByRole("ADMIN");
+        for (User check : role1.getUsers()) {
+            if (check.getId() == user.getId()) {
+                return "redirect:/admin";
+            }
+        }
         return "list";
+    }
+
+    @RequestMapping("/see")
+    public String seePage(Principal principal, Model model) {
+        model.addAttribute("list", list.findAll());
+        return "see";
+    }
+
+    @RequestMapping("/admin")
+    public String adminPage(Principal principal, Model model) {
+        model.addAttribute("list", list.findAll());
+        User user = ((CustomUserDetails)((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getUser();
+        model.addAttribute("user", user);
+        return "admin";
     }
 
     @RequestMapping("/login")
@@ -105,5 +125,11 @@ public class HomeController {
     public String viewTask(@PathVariable("id") long id, Model model) {
         model.addAttribute("msg", list.findById(id).get());
         return "show";
+    }
+
+    @RequestMapping("/delete/{id}")
+    public String deleteTask(@PathVariable("id") long id, Model model) {
+        list.deleteById(id);
+        return "redirect:/admin";
     }
 }

@@ -8,10 +8,8 @@
 <body>
 <h1></h1>
 <div class="container">
-    <div th:replace="base :: header"></div>
-    <p>Logged in as:
-        <b th:text="${user.username}"></b>
-        <a class="btn btn-dark btn-sm" role="button" href="/logout">Logout</a>
+    <p>
+    <a class="btn btn-primary btn-lg" role="button" th:href="@{/}">Login</a>
     </p>
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -28,8 +26,8 @@
             <td th:text="${msg.content}"></td>
             <td th:text="${msg.postedDate}"></td>
             <td>
-                <a class="btn btn-secondary btn-sm" th:href="@{/view/{id}(id=${msg.id})}">
-                    View
+                <a class="btn btn-secondary btn-sm disabled" aria-disabled="true" th:href="@{/view/{id}(id=${msg.id})}">
+                    Login to View
                     <div th:if="${msg.thumb} != null">
                         <img th:src="${msg.thumb}" class="img-thumbnail" />
                     </div>
