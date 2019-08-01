@@ -1,4 +1,4 @@
-package com.joseph.bullhorn;
+package com.sam.bullhorn;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Singleton;

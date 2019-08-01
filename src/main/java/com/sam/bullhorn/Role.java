@@ -1,4 +1,4 @@
-package com.joseph.bullhorn;
+package com.sam.bullhorn;
 
 import javax.persistence.*;
 import java.util.Collection;

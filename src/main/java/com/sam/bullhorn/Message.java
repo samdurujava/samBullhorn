@@ -1,4 +1,4 @@
-package com.joseph.bullhorn;
+package com.sam.bullhorn;
 
 import org.springframework.lang.NonNull;
 
@@ -30,16 +30,16 @@ public class Message {
     private String image;
     private String thumb;
 
-    @NonNull
-    private boolean sepia;
-
-    public boolean isSepia() {
-        return sepia;
-    }
-
-    public void setSepia(boolean sepia) {
-        this.sepia = sepia;
-    }
+//    @NonNull
+//    private boolean sepia;
+//
+//    public boolean isSepia() {
+//        return sepia;
+//    }
+//
+//    public void setSepia(boolean sepia) {
+//        this.sepia = sepia;
+//    }
 
     public String getImage() {
         return image;

@@ -1,4 +1,4 @@
-package com.joseph.bullhorn;
+package com.sam.bullhorn;
 
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class HomeController {
 
     @Autowired
-    MessageList list;
+    MessageRepository list;
 
     @Autowired
     UserRepository userRepository;
@@ -99,16 +99,16 @@ public class HomeController {
         if (!file.isEmpty()) {
             try {
                 Map uploadResult = cloudc.upload(file.getBytes(), ObjectUtils.asMap("resourcetype", "auto"));
-                if (msg.isSepia()) {
-                    msg.setImage(cloudc.sepia(uploadResult.get("public_id").toString()));
-                    String info = cloudc.sepiaThumb(uploadResult.get("public_id").toString() + ".jpg", 50, 50, "fill");
-                    msg.setThumb(info);
-                } else {
+//                if (msg.isSepia()) {
+//                    msg.setImage(cloudc.sepia(uploadResult.get("public_id").toString()));
+//                    String info = cloudc.sepiaThumb(uploadResult.get("public_id").toString() + ".jpg", 50, 50, "fill");
+//                    msg.setThumb(info);
+//                } else {
                     msg.setImage(uploadResult.get("url").toString());
                     String info = cloudc.createUrl(uploadResult.get("public_id").toString() + ".jpg", 50, 50, "fill");
                     String thumb = info.substring(info.indexOf("'") + 1, info.indexOf("'", info.indexOf("'") + 1));
                     msg.setThumb(thumb);
-                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

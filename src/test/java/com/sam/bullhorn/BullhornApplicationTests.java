@@ -1,4 +1,4 @@
-package com.joseph.bullhorn;
+package com.sam.bullhorn;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

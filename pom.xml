@@ -8,7 +8,7 @@
 		<version>2.1.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.joseph</groupId>
+	<groupId>com.sam</groupId>
 	<artifactId>bullhorn</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bullhorn</name>
@@ -23,15 +23,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<!--cloudinary-->
 		<dependency>
 			<groupId>com.cloudinary</groupId>
 			<artifactId>cloudinary-taglib</artifactId>
-			<version>1.2.1</version>
+			<version>1.22.1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.cloudinary</groupId>
 			<artifactId>cloudinary-http44</artifactId>
-			<version>1.2.1</version>
+			<version>1.22.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
