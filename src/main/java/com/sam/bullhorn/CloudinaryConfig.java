@@ -33,18 +33,21 @@ public class CloudinaryConfig {
     }
 
     public String createUrl(String name, int width, int height, String action) {
-        return cloudinary.url().transformation(new Transformation().width(width)
+        return cloudinary.url()
+                .transformation(new Transformation().width(width)
                 .height(height).crop(action)).imageTag(name);
     }
 
-    public String sepia(String name) {
-        String info = cloudinary.url().transformation(new Transformation().effect("sepia")).imageTag(name);
-        return info.substring(info.indexOf("'") + 1, info.indexOf("'", info.indexOf("'") + 1));
-    }
-
-    public String sepiaThumb(String name, int width, int height, String action) {
-        String info = cloudinary.url().transformation(new Transformation().width(width)
-                .height(height).crop(action).chain().effect("sepia")).imageTag(name);
-        return info.substring(info.indexOf("'") + 1, info.indexOf("'", info.indexOf("'") + 1));
-    }
+//    public String sepia(String name) {
+//        String info = cloudinary.url()
+//        .transformation(new Transformation()
+//                .effect("sepia")).imageTag(name);
+//        return info.substring(info.indexOf("'") + 1, info.indexOf("'", info.indexOf("'") + 1));
+//    }
+//
+//    public String sepiaThumb(String name, int width, int height, String action) {
+//        String info = cloudinary.url().transformation(new Transformation().width(width)
+//                .height(height).crop(action).chain().effect("sepia")).imageTag(name);
+//        return info.substring(info.indexOf("'") + 1, info.indexOf("'", info.indexOf("'") + 1));
+//    }
 }
