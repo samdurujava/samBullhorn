@@ -13,6 +13,9 @@
 <br />
 <br />
 <div class="container">
+    <style type="text/css">
+        body { background: palegoldenrod !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+    </style>
     <div th:replace="base :: header"></div>
     <p>Logged in as:
         <b th:text="${user.username}"></b>

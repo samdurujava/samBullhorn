@@ -80,7 +80,7 @@ public class HomeController {
         model.addAttribute("list", list.findAll());
         User user = ((CustomUserDetails)((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getUser();
         model.addAttribute("user", user);
-        return "admin";
+        return "list";
     }
 
     @RequestMapping("/login")
