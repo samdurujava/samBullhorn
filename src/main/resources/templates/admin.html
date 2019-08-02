@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:as="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -16,10 +16,8 @@
     <style type="text/css">
         body { background: palegoldenrod !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
     </style>
-    <div th:replace="base :: header"></div>
-    <p>Logged in as:
-        <b th:text="${user.username}"></b>
-        <a class="btn btn-dark btn-sm" role="button" href="/logout">Logout</a>
+    <p><a class="btn btn-primary" role="button" href="#"Logged in as:--><b th:text="${user.username}"></b>
+    </a>
     </p>
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -44,6 +42,9 @@
                 </a>
                 <a class="btn btn-danger btn-sm" th:href="@{/delete/{id}(id=${msg.id})}">
                     Delete
+                    <div th:if="${msg.thumb} != null">
+                        <img th:src="${msg.thumb}" class="img-thumbnail" />
+                    </div>
                 </a>
             </td>
         </tr>
