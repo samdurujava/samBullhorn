@@ -70,6 +70,11 @@ public class HomeController {
         return "see";
     }
 
+    @GetMapping("/terms")
+    public String getTerms() {
+        return "terms";
+    }
+
     @RequestMapping("/admin")
     public String adminPage(Principal principal, Model model) {
         model.addAttribute("list", list.findAll());
