@@ -64,6 +64,11 @@ public class HomeController {
         return "list";
     }
 
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String profile (){
+        return "profile";
+    }
+
     @RequestMapping("/see")
     public String seePage(Principal principal, Model model) {
         model.addAttribute("list", list.findAll());
